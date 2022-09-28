@@ -5,10 +5,11 @@ class Student < Person
 
   def initialize
     super(age, name, parent_permission)
+    @classroom = classroom
+    add_to_class(classroom)
   end
 
-  def classroom=(classroom)
-    @classroom = classroom
+  def add_student(classroom)
     classroom.add_student(self)
   end
 
