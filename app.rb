@@ -77,5 +77,28 @@ class App
     puts 'Book created successfully'
   end
 
+  # create a rental
+  def create_rental
+    if @books.length.positive? && @persons.length.positive?
+      puts 'Select a book from the following list by number'
+      @books.each_with_index { |book, index| puts "#{index}) #{book}" }
+
+      book_index = gets.chomp.to_i
+
+      puts 'Select a person from the following list by number (not id)'
+      @persons.each_with_index { |person, index| puts "#{index}) #{person}" }
+
+      person_index = gets.chomp.to_i
+
+      print 'Date (yyyy-mm-dd): '
+      date = gets.chomp
+
+      @rentals << Rental.new(date, @books[book_index], @persons[person_index])
+      puts 'Rental created successfully'
+    else
+      puts 'There are no books or persons to create a rental'
+    end
+  end
+
 
 end
