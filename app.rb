@@ -113,7 +113,4 @@ class App
       puts 'No rentals found for that ID'
     end
   end
-
-  def start
-    puts 'Welcome to School Library App!'
 end
