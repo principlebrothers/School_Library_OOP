@@ -100,5 +100,20 @@ class App
     end
   end
 
+  # list all rentals for a given person by id
+  def list_rentals_for_person_id
+    print 'ID of person: '
+    id = gets.chomp.to_i
 
+    rental = @rentals.each { |rental| person.id == id }
+    if rental.length >= 1
+      puts 'Rentals:'
+      rental.each { |rental| puts "#{index}. Date: #{rental.date}, Book: \"#{rental.book.title}\" by #{rental.book.author}" }
+    else
+      puts 'No rentals found for that ID'
+    end
+  end
+
+  def start
+    puts 'Welcome to School Library App!'
 end
