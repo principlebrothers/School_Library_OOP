@@ -14,5 +14,10 @@ class App
     @rentals = []
   end
 
-  
+  # list all books
+  def list_books
+    @books.each { |book| puts book }
+  end
+
+ 
 end
