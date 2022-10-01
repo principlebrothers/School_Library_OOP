@@ -103,14 +103,15 @@ class App
   def create_rental
     if @books.length.positive? && @people.length.positive?
       @books.each_with_index { |book, index| puts "#{index}). Title: '#{book.title}' by Author: #{book.author}" }
-      puts 'Select a book from the following list by number'
+      puts 'Select a book from the list above by number'
 
       book_index = gets.chomp.to_i
 
       @people.each_with_index do |person, index|
         puts "#{index}. [#{person.class}] Name: #{person.name}, ID: #{person.id}"
       end
-      puts 'Select a person from the following list by number (not ID)'
+      puts ' '
+      puts 'Select a person from the list by number on your left (not ID)'
       print 'number: '
 
       person_index = gets.chomp.to_i
