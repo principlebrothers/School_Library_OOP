@@ -24,6 +24,8 @@ To get a working local copy up and running follow these simple steps
 ```
 git clone https://github.com/principlebrothers/School_Library_OOP.git
 
+- Run `ruby main.rb` in your terminal to see the output
+
 ```
 
 ### Usage
