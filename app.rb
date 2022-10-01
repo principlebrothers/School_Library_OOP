@@ -4,6 +4,7 @@ require_relative 'book'
 require_relative 'student'
 require_relative 'teacher'
 require_relative 'classroom'
+require 'date'
 
 class App
   attr_reader :books, :people, :rentals
@@ -16,12 +17,22 @@ class App
 
   # list all books
   def list_books
-    @books.each { |book| puts book }
+    if @books.length.positive?
+      @books.each { |book, index| puts "#{index}. Title: #{book.title}, Author: #{book.author}" }
+    else
+      puts 'No book available yet'
+    end
   end
 
   # list all people
   def list_people
-    @people.each { |person| puts person }
+    if @people.length.positive?
+      @people.each do |person|
+        puts "[#{person.class}] Name: #{person.name}, Age: #{person.age} years, ID: #{person.id}"
+      end
+    else
+      puts 'No person added yet'
+    end
   end
 
   # create a person
@@ -34,35 +45,46 @@ class App
       return
     end
 
+    case person_type
+    when '1'
+      create_student
+    when '2'
+      create_teacher
+    end
+  end
+
+  # create student
+  def create_student
     print 'Name: '
     name = gets.chomp
 
     print 'Age: '
     age = gets.chomp.to_i
 
-    case person_type
-    when '1'
-      print 'Do you have parent permission? [Y/N]: '
-      parent_permission = gets.chomp.downcase == 'y'
-      case parent_permission
-      when 'y'
-        parent_permission = true
-      when 'n'
-        parent_permission = false
-      else
-        puts 'Invalid input. Please enter "y" or "n"'
-        return
-      end
+    print 'Do you have parent permission? [Y/N]: '
+    parent_permission = gets.chomp.downcase == 'y'
 
-      @people << Student.new(age, name, parent_permission: parent_permission)
-      puts 'Person created successfully'
-    when '2'
-      print 'Specialization: '
-      specialization = gets.chomp
+    print 'What is the student\'s classroom?: '
+    classroom_label = gets.chomp
+    classroom = Classroom.new(classroom_label)
 
-      @people << Teacher.new(age, name, specialization,)
-      puts 'Person created successfully'
-    end
+    @people << Student.new(classroom, age, name, parent_permission: parent_permission)
+    puts '*** Student created successfully ***'
+  end
+
+  # create teacher
+  def create_teacher
+    print 'Name: '
+    name = gets.chomp
+
+    print 'Age: '
+    age = gets.chomp.to_i
+
+    print 'Specialization: '
+    specialization = gets.chomp
+
+    @people << Teacher.new(specialization, age, name)
+    puts '*** Person created successfully ***'
   end
 
   # create a book
@@ -74,27 +96,30 @@ class App
     author = gets.chomp
 
     @books << Book.new(title, author)
-    puts 'Book created successfully'
+    puts '*** Book created successfully ***'
   end
 
   # create a rental
   def create_rental
-    if @books.length.positive? && @persons.length.positive?
+    if @books.length.positive? && @people.length.positive?
+      @books.each_with_index { |book, index| puts "#{index}). Title: '#{book.title}' by Author: #{book.author}" }
       puts 'Select a book from the following list by number'
-      @books.each_with_index { |book, index| puts "#{index}) #{book}" }
 
       book_index = gets.chomp.to_i
 
-      puts 'Select a person from the following list by number (not id)'
-      @persons.each_with_index { |person, index| puts "#{index}) #{person}" }
+      @people.each_with_index do |person, index|
+        puts "#{index}. [#{person.class}] Name: #{person.name}, ID: #{person.id}"
+      end
+      puts 'Select a person from the following list by number (not ID)'
+      print 'number: '
+
 
       person_index = gets.chomp.to_i
 
-      print 'Date (yyyy-mm-dd): '
-      date = gets.chomp
+      date = Date.today
 
-      @rentals << Rental.new(date, @books[book_index], @persons[person_index])
-      puts 'Rental created successfully'
+      @rentals << Rental.new(date, @books[book_index], @people[person_index])
+      puts '*** Rental created successfully ***'
     else
       puts 'There are no books or persons to create a rental'
     end
@@ -103,12 +128,14 @@ class App
   # list all rentals for a given person by id
   def list_rentals_for_person_id
     print 'ID of person: '
-    id = gets.chomp.to_i
+    person_id = gets.chomp.to_i
 
-    rental = @rentals.each { |rental| person.id == id }
-    if rental.length >= 1
+    rentals = @rentals.filter { |rental| rental.person.id == person_id }
+    if rentals.length >= 1
       puts 'Rentals:'
-      rental.each { |rental| puts "#{index}. Date: #{rental.date}, Book: \"#{rental.book.title}\" by #{rental.book.author}" }
+      rentals.each do |rental|
+        puts "Date: #{rental.date}, Book: \"#{rental.book.title}\" by #{rental.book.author}"
+      end
     else
       puts 'No rentals found for that ID'
     end
