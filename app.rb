@@ -113,7 +113,6 @@ class App
       puts 'Select a person from the following list by number (not ID)'
       print 'number: '
 
-
       person_index = gets.chomp.to_i
 
       date = Date.today
