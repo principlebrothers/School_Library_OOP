@@ -2,7 +2,7 @@ require_relative 'start_up'
 
 class Main
   def initialize
-    start = StartUp.new
+    start = StartApp.new
     start.menu_options
   end
 
