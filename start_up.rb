@@ -1,6 +1,6 @@
 require_relative 'app'
 
-class StartUp
+class StartApp
   def initialize
     @app = App.new
     @option = 0
